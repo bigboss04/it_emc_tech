@@ -1,15 +1,18 @@
 package org.example.service.Place;
 
 import com.sun.jdi.request.DuplicateRequestException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.request.PlaceCategoryRequest;
 import org.example.dto.response.PlaceResponse.PlaceCategoryResponse;
+import org.example.exception.ResourceNotFoundException;
 import org.example.mapper.PlaceCategoryMapper;
 import org.example.model.PlaceCategory;
 import org.example.repository.PlaceCategoryRepository;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +20,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PlaceServiceImpl implements IPlaceService{
+public class PlaceCategoryCategoryServiceImpl implements IPlaceCategoryService {
     private final PlaceCategoryRepository placeCategoryRepository;
     private final PlaceCategoryMapper placeCategoryMapper;
 
+    @Transactional
     @Override
     public PlaceCategoryResponse createPlaceCategory(PlaceCategoryRequest placeCategoryRequest) {
         validatePlaceCategory(placeCategoryRequest);
@@ -68,10 +72,19 @@ public class PlaceServiceImpl implements IPlaceService{
     }
 
 
+    @Transactional
     @Override
     public PlaceCategoryResponse updatePlaceCategory(Long id, PlaceCategoryRequest placeCategoryRequest) {
         PlaceCategory existingPlaceCategory = placeCategoryRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("PLACE_CATEGORY_NOT_FOUND"));
+                        .filter(placeCategory -> !placeCategory.isDeleted())
+                        .orElseThrow(() -> new ResourceNotFoundException("PLACE_CATEGORY_NOT_FOUND"));
+
+        if(!existingPlaceCategory.getName().equals(placeCategoryRequest.getName())
+                && placeCategoryRepository.existsByNameAndDeletedFalse(placeCategoryRequest.getName())) {
+            throw new DuplicateRequestException(
+                    "Place category with name '" + placeCategoryRequest.getName() + "' already exists."
+            );
+        }
         existingPlaceCategory.setName(placeCategoryRequest.getName());
         existingPlaceCategory.setIcon(placeCategoryRequest.getIcon());
         PlaceCategory updatedPlaceCategory = persistPlaceCategory(existingPlaceCategory);
@@ -80,13 +93,17 @@ public class PlaceServiceImpl implements IPlaceService{
 
     @Override
     public void deletePlaceCategory(Long id) {
+
+        PlaceCategory placeCategory = placeCategoryRepository.findById(id)
+                .filter(c -> !c.isDeleted())
+                .orElseThrow(() -> new ResourceNotFoundException("PLACE_CATEGORY_NOT_FOUND"));
+        placeCategory.setDeleted(true);
         try {
-            placeCategoryRepository.deleteById(id);
+            placeCategoryRepository.save(placeCategory);
             log.info("Place category deleted successfully: ID={}", id);
         } catch (Exception e) {
             log.error("Error deleting place category: {}", e.getMessage());
             throw new ServiceException("DELETE_PLACE_CATEGORY_FAILED");
         }
-
     }
 }
