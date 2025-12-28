@@ -6,13 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.request.PlaceCategoryRequest;
 import org.example.dto.response.PlaceResponse.PlaceCategoryResponse;
+import org.example.exception.ErrorCode;
 import org.example.exception.ResourceNotFoundException;
 import org.example.mapper.PlaceCategoryMapper;
 import org.example.model.PlaceCategory;
 import org.example.repository.PlaceCategoryRepository;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PlaceCategoryCategoryServiceImpl implements IPlaceCategoryService {
+public class PlaceCategoryService implements IPlaceCategoryService {
     private final PlaceCategoryRepository placeCategoryRepository;
     private final PlaceCategoryMapper placeCategoryMapper;
 
@@ -77,7 +77,7 @@ public class PlaceCategoryCategoryServiceImpl implements IPlaceCategoryService {
     public PlaceCategoryResponse updatePlaceCategory(Long id, PlaceCategoryRequest placeCategoryRequest) {
         PlaceCategory existingPlaceCategory = placeCategoryRepository.findById(id)
                         .filter(placeCategory -> !placeCategory.isDeleted())
-                        .orElseThrow(() -> new ResourceNotFoundException("PLACE_CATEGORY_NOT_FOUND"));
+                        .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PLACE_CATEGORY));
 
         if(!existingPlaceCategory.getName().equals(placeCategoryRequest.getName())
                 && placeCategoryRepository.existsByNameAndDeletedFalse(placeCategoryRequest.getName())) {
@@ -96,7 +96,7 @@ public class PlaceCategoryCategoryServiceImpl implements IPlaceCategoryService {
 
         PlaceCategory placeCategory = placeCategoryRepository.findById(id)
                 .filter(c -> !c.isDeleted())
-                .orElseThrow(() -> new ResourceNotFoundException("PLACE_CATEGORY_NOT_FOUND"));
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PLACE_CATEGORY));
         placeCategory.setDeleted(true);
         try {
             placeCategoryRepository.save(placeCategory);

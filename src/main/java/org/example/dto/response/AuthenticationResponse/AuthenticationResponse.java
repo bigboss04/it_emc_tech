@@ -1,4 +1,4 @@
-package org.example.dto.response.authentication;
+package org.example.dto.response.AuthenticationResponse;
 
 
 import lombok.AllArgsConstructor;
@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AuthenticationResponse {
     private String token;
+    boolean authenticated  ;
 }

@@ -2,26 +2,23 @@ package org.example.controller;
 
 
 import jakarta.validation.Valid;
-import jdk.jfr.Category;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.request.PlaceCategoryRequest;
-import org.example.dto.request.PlaceRequest;
 import org.example.dto.response.ApiResponse;
 import org.example.dto.response.PlaceResponse.PlaceCategoryResponse;
-import org.example.model.PlaceCategory;
-import org.example.service.Place.PlaceCategoryCategoryServiceImpl;
+import org.example.service.Place.PlaceCategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/place-category")
+@RequestMapping("${api.prefix}/place-category")
 @RequiredArgsConstructor
-public class PlaceController {
-    private final PlaceCategoryCategoryServiceImpl placeCategoryService;
-    @PostMapping("/create")
+public class PlaceCategoryController {
+    private final PlaceCategoryService placeCategoryService;
+    @PostMapping("")
     public ApiResponse<PlaceCategoryResponse> createPlace(@Valid @RequestBody PlaceCategoryRequest placeCategoryRequest ) {
         PlaceCategoryResponse placeCategoryResponse =  placeCategoryService.createPlaceCategory(placeCategoryRequest);
         return ApiResponse.<PlaceCategoryResponse>builder()
@@ -38,6 +35,16 @@ public class PlaceController {
                 .statusCode(HttpStatus.OK.value())
                 .data(placeCategoryService.getAllPlaceCategories())
                 .message("Place categories retrieved successfully")
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<Optional<PlaceCategoryResponse>> getPlaceCategoryById(@PathVariable Long id) {
+        Optional<PlaceCategoryResponse> placeCategoryResponse = placeCategoryService.getPlaceCategoryById(id);
+        return ApiResponse.<Optional<PlaceCategoryResponse>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .data(placeCategoryResponse)
+                .message("Place category retrieved successfully")
                 .build();
     }
 

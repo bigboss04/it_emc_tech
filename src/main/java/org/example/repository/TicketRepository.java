@@ -1,4 +1,7 @@
 package org.example.repository;
 
-public interface TicketRepository extned {
+import org.example.model.Ticket;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+interface TicketRepository extends JpaRepository<Ticket, Long> {
 }

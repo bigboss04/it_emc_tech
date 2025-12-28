@@ -1,4 +1,7 @@
 package org.example.repository;
 
-public interface NearbyPlace {
+import org.example.model.NearbyPlace;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface NearbyPlaceRepository extends JpaRepository<NearbyPlace,Long> {
 }
