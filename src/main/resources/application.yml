@@ -22,3 +22,6 @@ spring:
 
 api:
   prefix: /api/v1
+
+jwt:
+  signerKey: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NjY5MDUwODMsImV4cCI6MTc2NjkwODY4MywianRpIjoiYTIzMzIyNTEtMzQ0NC00ZjVjLTk0MGYtMGUzNGZiZmRlNmIyIiwiaXNzIjoiYXBpLmV4YW1wbGUuY29tIiwic3ViIjoidXNlcl8zNzAzIiwiYXVkIjoiaHR0cHM6Ly9leGFtcGxlLmNvbSJ9.QolFPv_wDD7Ht2RG_vAoeQsOKQazAmIm9Lh69E9rDaubObr7IbhMSr-Hvj3Ec9i1vj_pFiTg905qZLD9JEqxNg"

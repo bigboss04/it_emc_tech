@@ -1,5 +1,6 @@
 package org.example.configuration;
 
+import org.example.enums.RoleName;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,10 +40,8 @@ public class SecurityConfig {
           httpSecurity.authorizeHttpRequests(request ->
                   request.requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
                           .requestMatchers(HttpMethod.GET,"/api/v1/users")
-                          .hasAuthority("SCOPE_ADMIN")
+                          .hasRole(String.valueOf(RoleName.ADMIN))
                           .anyRequest().authenticated());
-
-
 
           httpSecurity.oauth2ResourceServer(
                   oauth2 ->

@@ -3,6 +3,7 @@ package org.example.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -10,7 +11,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")  // tránh user là từ khóa
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -35,5 +37,6 @@ public class User {
     private String lastName;
 
     @ManyToMany
-    private Set<Role> roles;
+    Set<Role> roles;
+
 }

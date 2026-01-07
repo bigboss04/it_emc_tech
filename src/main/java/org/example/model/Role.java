@@ -10,14 +10,16 @@ import java.util.UUID;
 @Entity
 @Table(name = "roles")
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Role {
 
     @Id
     @GeneratedValue
     @org.hibernate.annotations.UuidGenerator
-    @Column(columnDefinition = "uuid")    private UUID id;
+    @Column(columnDefinition = "uuid")
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false)

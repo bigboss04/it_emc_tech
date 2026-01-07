@@ -42,25 +42,6 @@ public class AuthenticationService implements IAuthenticationService{
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
 
-//    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-//        // Dummy implementation for authentication
-//        // In a real implementation, you would verify the username and password here
-//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-//        User user = userRepository.findByUserName(authenticationRequest.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        boolean authenticated = passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword());
-//
-//        if(!authenticated ){
-//            throw new InvalidDataException("Invalid credentials");
-//        }
-
-//        var token = generateToken(authenticationRequest.getUsername());
-
-//        return AuthenticationResponse.builder()
-//                .token(token)
-//                .build();
-//    }
-
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
         var user = userRepository.findByUserName(authenticationRequest.getUserName()).orElseThrow(
                 ()-> new ResourceNotFoundException(ErrorCode.USER_NOT_EXISTED));
@@ -112,8 +93,6 @@ public class AuthenticationService implements IAuthenticationService{
             user.getRoles().forEach(stringJoiner::add);
         return stringJoiner.toString();
     }
-
-
 
 
     @Override

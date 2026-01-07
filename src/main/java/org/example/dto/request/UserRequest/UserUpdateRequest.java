@@ -10,6 +10,7 @@ import org.example.validator.DobConstraint;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Data
@@ -27,5 +28,5 @@ public class UserUpdateRequest {
     @DobConstraint(min = 10, message = "INVALID_DOB")
     LocalDate dob;
 
-    List<String> roles;
+    List<UUID> roles;
 }

@@ -1,7 +1,7 @@
 package org.example.enums;
 
-public enum RoleName {
+public enum  RoleName {
     ADMIN,
     USER,
-    MANAGER
+    MANAGER;
 }

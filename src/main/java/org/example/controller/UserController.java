@@ -3,21 +3,25 @@ package org.example.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.dto.request.UserRequest.UserCreationRequest;
 import org.example.dto.response.ApiResponse;
 import org.example.dto.response.UserResponse.UserResponse;
 import org.example.service.UserService.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 import static com.fasterxml.classmate.AnnotationOverrides.builder;
+import static dk.brics.automaton.StringUnionOperations.build;
 
 @RestController
 @RequestMapping("${api.prefix}/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -38,12 +42,17 @@ public class UserController {
                 .message("GET USER SUCCESSFULLY")
                 .build();
     }
-//
-//    @GetMapping("/my-info")
-//    ApiResponse<UserResponse> getMyInfo(){
-//        return ApiResponse.<UserResponse>builder()
-//                .data(user)
-//    }
+
+    @GetMapping("/my-info")
+    ApiResponse<UserResponse> getMyInfo(){
+        return ApiResponse.<UserResponse>builder()
+                .data(userService.getMyInfo())
+                .message("GET USER MY INFO SUCCESSFULLY")
+                .build();
+    }
+
+    private void build() {
+    }
 
     @DeleteMapping("/{userId}")
     ApiResponse<String> deleteUser(@PathVariable UUID userId){
@@ -55,6 +64,10 @@ public class UserController {
 
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        assert authentication != null;
+        log.info("USERNAME :{}", authentication.getName());
+        authentication.getAuthorities().forEach(grantedAuthority-> log.info(grantedAuthority.getAuthority()));
         return ApiResponse.<List<UserResponse>>builder()
                 .data(userService.getUsers())
                 .message("User Get List successfully")
