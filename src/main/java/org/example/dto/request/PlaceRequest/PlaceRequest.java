@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Data
@@ -22,8 +23,8 @@ public class PlaceRequest {
     private String openingHours;
     private String status; // Optional: "OPEN", "CLOSED"...
 
+    private UUID provinceId;
     private Long categoryId; // id của PlaceCategory
-    private Set<Long> managerIds; // id của Users
     private Set<Long> tagIds; // id của PlaceTag
 
     // Tickets
@@ -33,4 +34,5 @@ public class PlaceRequest {
     // Optional: status enum cho crowd/weather
     private String crowdStatus; // LOW/MEDIUM/HIGH/UNKNOWN
     private String weatherStatus; // SUNNY/RAINY/CLOUDY/STORM/UNKNOW
+    private List<String> imageUrls;
 }

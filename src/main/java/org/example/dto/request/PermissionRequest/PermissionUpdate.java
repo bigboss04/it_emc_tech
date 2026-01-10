@@ -1,5 +1,4 @@
-package org.example.dto.request;
-
+package org.example.dto.request.Permission;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +8,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PermissionRequest {
-    private String name;
-    private String description;
+public class PermissionUpdate {
+    String id;
+    String name;
+    String description;
 }
