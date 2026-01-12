@@ -1,4 +1,4 @@
-package org.example.dto.response.PlaceResponse;
+package org.example.dto.request.PlaceTagRequest;
 
 
 import lombok.AllArgsConstructor;
@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class PlaceCategoryResponse {
+public class PlaceTagRequest {
     private UUID id;
     private String name;
-    private String icon;
 }
